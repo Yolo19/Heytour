@@ -4,6 +4,9 @@ import Login from "../authentication/Login";
 
 export default function AppMenu() {
     const[loginOpen, setLoginOpen] = useState(false);
+    const [userName, setUserName] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
     function handleOpenLogin(){
         setLoginOpen(true);
@@ -12,6 +15,14 @@ export default function AppMenu() {
     function handleLoginClose(){
         setLoginOpen(false);
     }
+
+    function handleLogin(userName){
+        if(userName) {
+            setUserName(userName);
+            setIsLoggedIn(true);
+        }
+        setLoginOpen(false);
+    } 
     return (
         <div>
             <Menu size='large'>
@@ -20,20 +31,20 @@ export default function AppMenu() {
                 />
                 <Menu.Menu position='right'>
                 <Menu.Item>
-                    <Button primary
+                    {isLoggedIn ?(<div>{userName}</div>):
+                    (<Button primary
                         onClick={handleOpenLogin}
                     >
                         Login
-                    </Button>
+                    </Button>)}
                 </Menu.Item>
                 </Menu.Menu>
             </Menu>
-
             {loginOpen &&
             <Login
                 open={loginOpen}
                 onClose={handleLoginClose}
-                onClick={handleLoginClose}
+                onLogin={handleLogin}
             />
             }
         </div>
