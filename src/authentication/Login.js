@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Modal } from 'semantic-ui-react'
+import { Button, Divider, Form, Modal } from 'semantic-ui-react'
 
 export default function LoginModal(props){
     const [username, setUserName] = useState(''); 

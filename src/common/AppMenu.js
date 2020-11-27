@@ -1,28 +1,39 @@
-import React, { useState  } from 'react'
+import React, { useState} from 'react'
 import { Button, Menu } from 'semantic-ui-react'
 import Login from "../authentication/Login";
+// import {Login} from "../authentication/Login"
 
-export default function AppMenu() {
-    const[loginOpen, setLoginOpen] = useState(false);
-    const [userName, setUserName] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+const initState = {
+    username: '',
+    pwd: '',
+    isLoggedIn: false,
+    loginOpen: false
+}
 
-
-    function handleOpenLogin(){
-        setLoginOpen(true);
+function loginReducer(state, action) {
+    switch (action.type) {
+        case 'loggedIn' :
+            return {
+                ...state,
+                name: action.payload,
+                isLoggedIn: true,
+                loginOpen: false,
+            }
+        case 'notLoggedIn':
+            return {
+                ...state,
+                isLoggedIn: false,
+                loginOpen: true
+            }
+        default: 
+            return state;
     }
+}
 
-    function handleLoginClose(){
-        setLoginOpen(false);
-    }
+export default function AppMenu (){
+    const [reducer, dispatch] = React.useReducer(loginReducer, initState);
+    const [open, setOpen] = React.useState(false)
 
-    function handleLogin(userName){
-        if(userName) {
-            setUserName(userName);
-            setIsLoggedIn(true);
-        }
-        setLoginOpen(false);
-    } 
     return (
         <div>
             <Menu size='large'>
@@ -31,26 +42,71 @@ export default function AppMenu() {
                 />
                 <Menu.Menu position='right'>
                 <Menu.Item>
-                    {isLoggedIn ?(<div>{userName}</div>):
+                    {reducer.isLoggedIn?(<div>{reducer.name}</div>):
                     (<Button primary
-                        onClick={handleOpenLogin}
+                        onClick={()=> dispatch({type: 'notLoggedIn'})}
                     >
                         Login
                     </Button>)}
                 </Menu.Item>
                 </Menu.Menu>
             </Menu>
-            {loginOpen &&
+            {reducer.loginOpen &&
             <Login
-                open={loginOpen}
-                onClose={handleLoginClose}
-                onLogin={handleLogin}
+                open={()=> setOpen(true)}
+                onLogin={()=> dispatch({type: 'loggedIn'})}
+                onClose={()=> setOpen(false)}
             />
             }
-        </div>
-        
-
-        
+        </div>  
     )
+
 }
+// export default function AppMenu() {
+//     const[loginOpen, setLoginOpen] = useState(false);
+//     const [userName, setUserName] = useState('');
+//     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
+//     function handleOpenLogin(){
+//         setLoginOpen(true);
+//     }
+
+//     function handleLoginClose(){
+//         setLoginOpen(false);
+//     }
+
+//     function handleLogin(username){
+//         if(username) {
+//             setUserName(username);
+//             setIsLoggedIn(true);
+//         }
+//         setLoginOpen(false);
+//     } 
+//     return (
+//         <div>
+//             <Menu size='large'>
+//                 <Menu.Item
+//                 name='Heytour'
+//                 />
+//                 <Menu.Menu position='right'>
+//                 <Menu.Item>
+//                     {isLoggedIn ?(<div>{username}</div>):
+//                     (<Button primary
+//                         onClick={handleOpenLogin}
+//                     >
+//                         Login
+//                     </Button>)}
+//                 </Menu.Item>
+//                 </Menu.Menu>
+//             </Menu>
+//             {loginOpen &&
+//             <Login
+//                 open={loginOpen}
+//                 onClose={handleLoginClose}
+//                 onLogin={handleLogin}
+//             />
+//             }
+//         </div>  
+//     )
+// }
 
