@@ -15,7 +15,7 @@ function loginReducer(state, action) {
         case 'loggedIn' :
             return {
                 ...state,
-                name: action.payload,
+                username: action.payload,
                 isLoggedIn: true,
                 loginOpen: false,
             }
@@ -24,6 +24,11 @@ function loginReducer(state, action) {
                 ...state,
                 isLoggedIn: false,
                 loginOpen: true
+            }
+        case 'openModal':
+            return {
+                ...state,
+                loginOpen: false
             }
         default: 
             return state;
@@ -42,7 +47,7 @@ export default function AppMenu (){
                 />
                 <Menu.Menu position='right'>
                 <Menu.Item>
-                    {reducer.isLoggedIn?(<div>{reducer.name}</div>):
+                    {reducer.isLoggedIn?(<div>{reducer.username}</div>):
                     (<Button primary
                         onClick={()=> dispatch({type: 'notLoggedIn'})}
                     >
@@ -54,8 +59,8 @@ export default function AppMenu (){
             {reducer.loginOpen &&
             <Login
                 open={()=> setOpen(true)}
-                onLogin={()=> dispatch({type: 'loggedIn'})}
-                onClose={()=> setOpen(false)}
+                onLogin={(username)=> dispatch({type: 'loggedIn', payload: username})}
+                onClose={()=> dispatch({type: 'openModal'})}
             />
             }
         </div>  
