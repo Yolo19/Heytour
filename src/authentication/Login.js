@@ -32,7 +32,7 @@ export default function LoginModal(props){
                 }}
                 />
             </Form.Field>
-            <Button type='submit' onClick={props.onClose}>Close</Button>
+            <Button onClick={props.onClose}>Close</Button>
             <Button type='submit' onClick={onLogin}>Login</Button>
         </Form>
     </Modal>
